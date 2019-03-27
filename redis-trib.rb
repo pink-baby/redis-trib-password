@@ -1319,7 +1319,7 @@ class RedisTrib
         xputs ">>> Adding node #{argv[0]} to cluster #{argv[1]}"
 
         # Check the existing cluster
-        load_cluster_info_from_node(argv[1])
+        load_cluster_info_from_node(argv[1],argv[2])
         check_cluster
 
         # If --master-id was specified, try to resolve it now so that we
@@ -1337,7 +1337,7 @@ class RedisTrib
         end
 
         # Add the new node
-        new = ClusterNode.new(argv[0])
+        new = ClusterNode.new(argv[0],argv[2])
         new.connect(:abort => true)
         new.assert_cluster
         new.load_info
@@ -1651,7 +1651,7 @@ COMMANDS={
     "fix"     => ["fix_cluster_cmd", 2, "host:port"],
     "reshard" => ["reshard_cluster_cmd", 2, "host:port"],
     "rebalance" => ["rebalance_cluster_cmd", -2, "host:port"],
-    "add-node" => ["addnode_cluster_cmd", 3, "new_host:new_port existing_host:existing_port"],
+    "add-node" => ["addnode_cluster_cmd", 4, "new_host:new_port existing_host:existing_port"],
     "del-node" => ["delnode_cluster_cmd", 4, "host:port node_id"],
     "set-timeout" => ["set_timeout_cluster_cmd", 3, "host:port milliseconds"],
     "call" =>    ["call_cluster_cmd", -3, "host:port command arg arg .. arg"],
