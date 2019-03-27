@@ -1145,7 +1145,7 @@ class RedisTrib
     def reshard_cluster_cmd(argv,opt)
         opt = {'pipeline' => MigrateDefaultPipeline}.merge(opt)
 
-        load_cluster_info_from_node(argv[0])
+        load_cluster_info_from_node(argv[0],argv[1])
         check_cluster
         if @errors.length != 0
             puts "*** Please fix your cluster problems before resharding"
@@ -1649,7 +1649,7 @@ COMMANDS={
     "check"   => ["check_cluster_cmd", 2, "host:port"],
     "info"    => ["info_cluster_cmd", 2, "host:port"],
     "fix"     => ["fix_cluster_cmd", 2, "host:port"],
-    "reshard" => ["reshard_cluster_cmd", 2, "host:port"],
+    "reshard" => ["reshard_cluster_cmd", 3, "host:port"],
     "rebalance" => ["rebalance_cluster_cmd", -2, "host:port"],
     "add-node" => ["addnode_cluster_cmd", 4, "new_host:new_port existing_host:existing_port"],
     "del-node" => ["delnode_cluster_cmd", 4, "host:port node_id"],
