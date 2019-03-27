@@ -97,7 +97,7 @@ class ClusterNode
         print "Connecting to node #{self}: " if $verbose
         STDOUT.flush
         begin
-            @r = Redis.new(:host => @info[:host], :port => @info[:port], :timeout => 60)
+            @r = Redis.new(:host => @info[:host], :port => @info[:port], :password => @info[:password], :timeout => 60)
             @r.ping
         rescue
             xputs "[ERR] Sorry, can't connect to node #{self}"
@@ -833,7 +833,7 @@ class RedisTrib
             next if f[:flags].index("noaddr") ||
                     f[:flags].index("disconnected") ||
                     f[:flags].index("fail")
-            fnode = ClusterNode.new(f[:addr])
+            fnode = ClusterNode.new(f[:addr], password)
             fnode.connect()
             next if !fnode.r
             begin
