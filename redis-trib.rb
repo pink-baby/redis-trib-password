@@ -55,7 +55,7 @@ def xputs(s)
 end
 
 class ClusterNode
-    def initialize(addr)
+    def initialize(addr, password=nil)
         s = addr.split(":")
         if s.length < 2
            puts "Invalid IP or Port (given as #{addr}) - use IP:Port format"
@@ -65,6 +65,7 @@ class ClusterNode
         ip = s.join(":") # if s.length > 1 here, it's IPv6, so restore address
         @r = nil
         @info = {}
+        @info[:password] = password
         @info[:host] = ip
         @info[:port] = port
         @info[:slots] = {}
@@ -822,8 +823,8 @@ class RedisTrib
         end
     end
 
-    def load_cluster_info_from_node(nodeaddr)
-        node = ClusterNode.new(nodeaddr)
+    def load_cluster_info_from_node(nodeaddr, password=nil)
+        node = ClusterNode.new(nodeaddr, password)
         node.connect(:abort => true)
         node.assert_cluster
         node.load_info(:getfriends => true)
@@ -1363,7 +1364,7 @@ class RedisTrib
         xputs ">>> Removing node #{id} from cluster #{argv[0]}"
 
         # Load cluster information
-        load_cluster_info_from_node(argv[0])
+        load_cluster_info_from_node(argv[0],argv[2])
 
         # Check if the node exists and is not empty
         node = get_node_by_name(id)
@@ -1651,7 +1652,7 @@ COMMANDS={
     "reshard" => ["reshard_cluster_cmd", 2, "host:port"],
     "rebalance" => ["rebalance_cluster_cmd", -2, "host:port"],
     "add-node" => ["addnode_cluster_cmd", 3, "new_host:new_port existing_host:existing_port"],
-    "del-node" => ["delnode_cluster_cmd", 3, "host:port node_id"],
+    "del-node" => ["delnode_cluster_cmd", 4, "host:port node_id"],
     "set-timeout" => ["set_timeout_cluster_cmd", 3, "host:port milliseconds"],
     "call" =>    ["call_cluster_cmd", -3, "host:port command arg arg .. arg"],
     "import" =>  ["import_cluster_cmd", 2, "host:port"],
