@@ -988,7 +988,7 @@ class RedisTrib
 
         # Load nodes info before parsing options, otherwise we can't
         # handle --weight.
-        load_cluster_info_from_node(argv[0])
+        load_cluster_info_from_node(argv[0],argv[1])
 
         # Options parsing
         threshold = opt['threshold'].to_i
@@ -1650,7 +1650,7 @@ COMMANDS={
     "info"    => ["info_cluster_cmd", 2, "host:port"],
     "fix"     => ["fix_cluster_cmd", 2, "host:port"],
     "reshard" => ["reshard_cluster_cmd", 3, "host:port"],
-    "rebalance" => ["rebalance_cluster_cmd", -2, "host:port"],
+    "rebalance" => ["rebalance_cluster_cmd", -1, "host:port"],
     "add-node" => ["addnode_cluster_cmd", 4, "new_host:new_port existing_host:existing_port"],
     "del-node" => ["delnode_cluster_cmd", 4, "host:port node_id"],
     "set-timeout" => ["set_timeout_cluster_cmd", 3, "host:port milliseconds"],
